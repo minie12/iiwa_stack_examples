@@ -1,5 +1,5 @@
 # iiwa_tool
-Examplary packages on how to extend [**iiwa_stack**](https://github.com/SalvoVirga/iiwa_stack) to use a KUKA LBR IIWA with a tool attached.
+Exemplary packages on how to extend [**iiwa_stack**](https://github.com/SalvoVirga/iiwa_stack) to use a KUKA LBR IIWA with a tool attached.
 
 This packages are used within the [**wiki of iiwa_stack**](https://github.com/SalvoVirga/iiwa_stack/wiki) to explain some basic concepts of its usage.     
 [**iiwa_stack**](https://github.com/SalvoVirga/iiwa_stack) needs to present on the system to make these packages work.
