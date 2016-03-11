@@ -1,13 +1,11 @@
 #include "ros/ros.h"
 #include "iiwa_msgs/JointPosition.h"
 #include "geometry_msgs/PoseStamped.h"
-
-#include <moveit/move_group_interface/move_group.h>
-#include <moveit/planning_interface/planning_interface.h>
+#include "iiwa_msgs/ConfigureSmartServo.h"
 
 iiwa_msgs::JointPosition current_joint_position;
-geometry_msgs::PoseStamped current_cartesian_position, command_cartesian_position;
-std::string joint_position_topic, cartesian_position_topic, movegroup_name, ee_link;
+geometry_msgs::PoseStamped current_cartesian_position;
+std::string joint_position_topic, cartesian_position_topic;
 int ros_rate = 20000;
 bool isRobotConnected = false;
 
@@ -38,8 +36,9 @@ int main (int argc, char **argv) {
   // Dynamic parameters. Last arg is the default value. You can assign these from a launch file.
   nh.param<std::string>("joint_position_topic", joint_position_topic, "/iiwa/state/JointPosition");
   nh.param<std::string>("cartesian_position_topic", cartesian_position_topic, "/iiwa/state/CartesianPose");
-  nh.param<std::string>("move_group", movegroup_name, "manipulator");
-  nh.param<std::string>("ee_link", ee_link, "tool_link_ee");
+  
+  ros::ServiceClient client = nh.serviceClient<iiwa_msgs::ConfigureSmartServo>("/iiwa/configuration/configureSmartServo");
+  iiwa_msgs::ConfigureSmartServo config;
   
   // Dynamic parameter to choose the rate at wich this node should run
   nh.param("ros_rate", ros_rate, 20000); // 20 sec
@@ -49,31 +48,37 @@ int main (int argc, char **argv) {
   ros::Subscriber sub_joint_position = nh.subscribe(joint_position_topic, 1, jointPositionCallback);
   ros::Subscriber sub_cartesian_position = nh.subscribe(cartesian_position_topic, 1, cartesianPositionCallback);
   
-  int direction = 1;
-  
-  // Create MoveGroup
-  move_group_interface::MoveGroup group(movegroup_name);
-  moveit::planning_interface::MoveGroup::Plan myplan;
-      
-  // Configure planner 
-  group.setPlanningTime(0.5);
-  group.setPlannerId(movegroup_name+"[RRTConnectkConfigDefault]");
-  group.setEndEffectorLink(ee_link);
-
   
   while (ros::ok()) {
     if (isRobotConnected) {
       
-      command_cartesian_position = current_cartesian_position;
-      command_cartesian_position.pose.position.z -= direction * 0.10;
-  
-      group.setStartStateToCurrentState();
-      group.setPoseTarget(command_cartesian_position);
-      bool success = group.plan(myplan);
-      if (success)
-      group.execute(myplan);
+      config.request.mode.mode = iiwa_msgs::SmartServoMode::CARTESIAN_IMPEDANCE;
+      config.request.mode.relative_velocity = 0.05;
+      config.request.mode.cartesian_stiffness.stiffness.x = 1000;
+      config.request.mode.cartesian_stiffness.stiffness.y = 1000;
+      config.request.mode.cartesian_stiffness.stiffness.z = 350;
+      config.request.mode.cartesian_stiffness.stiffness.a = 400;
+      config.request.mode.cartesian_stiffness.stiffness.b = 400;
+      config.request.mode.cartesian_stiffness.stiffness.c = 400;
       
-      direction *= -1; // In the next iteration the motion will be on the opposite direction
+      config.request.mode.cartesian_damping.damping.x = 0.7;
+      config.request.mode.cartesian_damping.damping.y = 0.7;
+      config.request.mode.cartesian_damping.damping.z = 0.7;
+      config.request.mode.cartesian_damping.damping.a = 0.7;
+      config.request.mode.cartesian_damping.damping.b = 0.7;
+      config.request.mode.cartesian_damping.damping.c = 0.7;
+      
+      if (client.call(config))
+      {
+	if(!config.response.success)
+	  ROS_ERROR("Config failed, Java error: %s", config.response.error.c_str());
+	else
+	  ROS_INFO("SmartServo Service successfully called.");
+      }
+      else
+      {
+	ROS_ERROR("Config failed - service could not be called - QUITTING NOW !");
+      }
       
       loop_rate_->sleep(); // Sleep for some millisecond. The while loop will run every 20 seconds in this example.
     }
