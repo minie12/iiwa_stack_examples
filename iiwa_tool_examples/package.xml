@@ -9,6 +9,9 @@
 
   <run_depend>iiwa_tool_description</run_depend>
   <run_depend>iiwa_tool_moveit</run_depend>
+  <run_depend>moveit_core</run_depend>
+  <run_depend>moveit_ros_planning_interface</run_depend>
+  <run_depend>moveit_ros_planning</run_depend>
   
   <buildtool_depend>catkin</buildtool_depend>
   

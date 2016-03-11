@@ -5,6 +5,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   iiwa_msgs
   geometry_msgs
+  moveit_core 
+  moveit_ros_planning
+  moveit_ros_planning_interface
 )
 
 catkin_package()
@@ -16,3 +19,6 @@ target_link_libraries(read_robot_state ${catkin_LIBRARIES})
 
 add_executable(command_robot src/command_robot.cpp)
 target_link_libraries(command_robot ${catkin_LIBRARIES})
+
+add_executable(command_robot_moveit src/command_robot_moveit.cpp)
+target_link_libraries(command_robot_moveit ${catkin_LIBRARIES})
