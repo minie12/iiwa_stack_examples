@@ -7,7 +7,10 @@
   <maintainer email="salvo.virga@tum.de">Salvo Virga</maintainer>
 
   <license>BSD</license>
-
+  
+  <build_depend>iiwa_description</build_depend>  
+  <run_depend>iiwa_description</run_depend>
+  
   <buildtool_depend>catkin</buildtool_depend>
 
 </package>

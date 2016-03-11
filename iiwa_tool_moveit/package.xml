@@ -22,8 +22,17 @@
   <run_depend>xacro</run_depend>
   <build_depend>iiwa_tool_description</build_depend>
   <run_depend>iiwa_tool_description</run_depend>
-
-
+  
+  <build_depend>iiwa_hw</build_depend>
+  <build_depend>iiwa_control</build_depend>
+  <build_depend>iiwa_gazebo</build_depend>
+  <build_depend>iiwa_moveit</build_depend>
+  
+  <run_depend>iiwa_hw</run_depend>
+  <run_depend>iiwa_ros</run_depend>
+  <run_depend>iiwa_msgs</run_depend>
+  <run_depend>iiwa_control</run_depend>
+  
   <buildtool_depend>catkin</buildtool_depend>
   
 </package>
