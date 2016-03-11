@@ -87,7 +87,7 @@ int main (int argc, char **argv) {
 	command_joint_position = current_joint_position;
 	command_joint_position.position.a4 -= direction * 0.0872665; // Adding/Subtracting 5 degrees (in radians) to the 4th joint
 	
-	pub_joint_command.publish(command_joint_position); // Commadn position is published and executed by the robot (if the joint limit is not exceeded)
+	pub_joint_command.publish(command_joint_position); // Command position is published and executed by the robot (if the joint limit is not exceeded)
 	
       }
       

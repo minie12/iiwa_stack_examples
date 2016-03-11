@@ -5,7 +5,7 @@
     
     <!-- | 		PARAMETERS  		| -->
     <!-- the "sim" argument controls whether we connect to a Simulated or Real robot. -->
-    <arg name="sim" default="false" doc="If true, the robot will be simulated in Gazebo" />
+    <arg name="sim" default="true" doc="If true, the robot will be simulated in Gazebo" />
     <!-- hardware_interface to use : PositionJointInterface, EffortJointInterface, VelocityJointInterface. -->
     <arg name="hardware_interface" default="PositionJointInterface"/>
     <!-- name of the iiwa to use, useful in case of multiple robots. Every robot is gonna have its nodees/topics under a namespace with the same name. -->
