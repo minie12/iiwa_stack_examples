@@ -26,7 +26,7 @@ void cartesianPositionCallback(const geometry_msgs::PoseStamped& ps)
 int main (int argc, char **argv) {
   
   // Initialize ROS
-  ros::init(argc, argv, "CommandRobotMoveit");
+  ros::init(argc, argv, "ControlMode");
   ros::NodeHandle nh("~");
   
   // ROS spinner.
@@ -47,11 +47,12 @@ int main (int argc, char **argv) {
   // Subscribers and publishers
   ros::Subscriber sub_joint_position = nh.subscribe(joint_position_topic, 1, jointPositionCallback);
   ros::Subscriber sub_cartesian_position = nh.subscribe(cartesian_position_topic, 1, cartesianPositionCallback);
-  
+  bool set_control = true;
   
   while (ros::ok()) {
-    if (isRobotConnected) {
+    if (isRobotConnected && set_control) {
       
+      // Setting Cartesian Impedance mode
       config.request.mode.mode = iiwa_msgs::SmartServoMode::CARTESIAN_IMPEDANCE;
       config.request.mode.relative_velocity = 0.05;
       config.request.mode.cartesian_stiffness.stiffness.x = 1000;
@@ -68,18 +69,36 @@ int main (int argc, char **argv) {
       config.request.mode.cartesian_damping.damping.b = 0.7;
       config.request.mode.cartesian_damping.damping.c = 0.7;
       
+//       What else is possible :
+//       config.request.mode.mode = iiwa_msgs::SmartServoMode::JOINT_IMPEDANCE;
+//       config.request.mode.joint_stiffness.stiffness.a1 = ...;
+//       config.request.mode.joint_stiffness.stiffness.a2 = ...;
+//       config.request.mode.joint_stiffness.stiffness.a3 = ...;
+//       config.request.mode.joint_stiffness.stiffness.a4 = ...;
+//       config.request.mode.joint_stiffness.stiffness.a5 = ...;
+//       config.request.mode.joint_stiffness.stiffness.a6 = ...;
+//       config.request.mode.joint_stiffness.stiffness.a7 = ...;
+//       
+//       config.request.mode.joint_damping.damping.a1 = ...;
+//       
+//       config.request.mode.nullspace_stiffness = ...;
+//       config.request.mode.nullspace_damping = ...;
+      
       if (client.call(config))
       {
 	if(!config.response.success)
 	  ROS_ERROR("Config failed, Java error: %s", config.response.error.c_str());
-	else
+	else {
 	  ROS_INFO("SmartServo Service successfully called.");
+	  set_control = false;
+	}
       }
       else
       {
 	ROS_ERROR("Config failed - service could not be called - QUITTING NOW !");
       }
       
+      // Do some work;
       loop_rate_->sleep(); // Sleep for some millisecond. The while loop will run every 20 seconds in this example.
     }
     else {
