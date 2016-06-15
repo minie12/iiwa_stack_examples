@@ -5,7 +5,7 @@
 iiwa_msgs::JointPosition current_joint_position, command_joint_position;
 geometry_msgs::PoseStamped current_cartesian_position, command_cartesian_position;
 std::string joint_position_topic, cartesian_position_topic, command_cartesian_position_topic, command_joint_position_topic;
-int ros_rate = 20000;
+double ros_rate = 0.1;
 bool isRobotConnected = false, use_cartesian_command = true;
 
 void jointPositionCallback(const iiwa_msgs::JointPosition& jp)
@@ -40,7 +40,7 @@ int main (int argc, char **argv) {
   nh.param("use_cartesian_command", use_cartesian_command, true);
   
   // Dynamic parameter to choose the rate at wich this node should run
-  nh.param("ros_rate", ros_rate, 20000); // 20 sec
+  nh.param("ros_rate", ros_rate, 0.1); // 0.1 Hz = 10 seconds
   ros::Rate* loop_rate_ = new ros::Rate(ros_rate);
   
   // Subscribers and publishers
@@ -94,11 +94,11 @@ int main (int argc, char **argv) {
       direction *= -1; // In the next iteration the motion will be on the opposite direction
 
       
-      loop_rate_->sleep(); // Sleep for some millisecond. The while loop will run every 20 seconds in this example.
+      loop_rate_->sleep(); // Sleep for some millisecond. The while loop will run every 10 seconds in this example.
     }
     else {
       ROS_ERROR("Robot is not connected...");
-      ros::Duration(5.0).sleep();
+      ros::Duration(5.0).sleep(); // 5 seconds
     }
   }
   

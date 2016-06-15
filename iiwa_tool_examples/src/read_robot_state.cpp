@@ -3,7 +3,7 @@
 
 iiwa_msgs::JointPosition current_joint_position;
 std::string joint_position_topic;
-int ros_rate = 1000;
+double ros_rate = 0.1;
 bool isRobotConnected = false;
 
 void jointPositionCallback(const iiwa_msgs::JointPosition& jp)
@@ -26,7 +26,7 @@ int main (int argc, char **argv) {
   // Dynamic parameter to choose the topic to use. Last arg is the default value.
   nh.param("joint_position_topic", joint_position_topic, std::string("/iiwa/state/JointPosition"));
   // Dynamic parameter to choose the rate at wich this node should run
-  nh.param("ros_rate", ros_rate, 1000); // 1 sec
+  nh.param("ros_rate", ros_rate, 0.1); // 0.1 Hz = 10 seconds
   ros::Rate* loop_rate_ = new ros::Rate(ros_rate);
   
   // Subscriber to the given topic
@@ -43,12 +43,12 @@ int main (int argc, char **argv) {
 	       current_joint_position.position.a6, 
 	       current_joint_position.position.a7);
       
-      // Sleep for some milliseconds. The while loop will run every second in this example.
+      // Sleep for some milliseconds. The while loop will run every 10 seconds in this example.
       loop_rate_->sleep();
     }
     else {
       ROS_ERROR("Robot is not connected...");
-      ros::Duration(5.0).sleep();
+      ros::Duration(5.0).sleep(); // 5 seconds
     }
   }
   

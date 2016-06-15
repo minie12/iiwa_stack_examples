@@ -6,7 +6,7 @@
 iiwa_msgs::JointPosition current_joint_position;
 geometry_msgs::PoseStamped current_cartesian_position;
 std::string joint_position_topic, cartesian_position_topic;
-int ros_rate = 20000;
+double ros_rate = 0.1;
 bool isRobotConnected = false;
 
 void jointPositionCallback(const iiwa_msgs::JointPosition& jp)
@@ -41,7 +41,7 @@ int main (int argc, char **argv) {
   iiwa_msgs::ConfigureSmartServo config;
   
   // Dynamic parameter to choose the rate at wich this node should run
-  nh.param("ros_rate", ros_rate, 20000); // 20 sec
+  nh.param("ros_rate", ros_rate, 0.1); // 0.1 Hz = 10 seconds
   ros::Rate* loop_rate_ = new ros::Rate(ros_rate);
   
   // Subscribers and publishers
@@ -99,11 +99,11 @@ int main (int argc, char **argv) {
       }
       
       // Do some work;
-      loop_rate_->sleep(); // Sleep for some millisecond. The while loop will run every 20 seconds in this example.
+      loop_rate_->sleep(); // Sleep for some millisecond. The while loop will run every 10 seconds in this example.
     }
     else {
       ROS_ERROR("Robot is not connected...");
-      ros::Duration(5.0).sleep();
+      ros::Duration(5.0).sleep(); // 5 seconds
     }
   }
   
