@@ -8,7 +8,7 @@
   <arg name="command_cartesian_position_topic" default="/iiwa/command/JointPosition"/>
   <arg name="command_joint_position_topic" default="/iiwa/command/CartesianPose"/>
   <arg name="use_cartesian_command" default="true"/>
-  <arg name="ros_rate" default="20000"/>
+  <arg name="ros_rate" default="0.1"/>
   
   <param name="/iiwa/publishJointStates" type="boolean" value="true" /> <!--publish joint states (avoid joint_state_controller)-->
   <param name="/iiwa/toolName" type="string" value="$(arg tool_name)" /> <!--Sunrise tool-->

@@ -7,7 +7,7 @@
   <arg name="cartesian_position_topic" default="/iiwa/state/CartesianPose"/>
   <arg name="move_group" default="manipulator"/>
   <arg name="ee_link" default="tool_link_ee"/>
-  <arg name="ros_rate" default="20000"/>
+  <arg name="ros_rate" default="0.1"/>
   
   <param name="/iiwa/toolName" type="string" value="$(arg tool_name)" /> <!--Sunrise tool-->
   

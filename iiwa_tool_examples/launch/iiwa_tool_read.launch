@@ -4,7 +4,7 @@
   
   <!-- Parameters to pass to the ROS node -->
   <arg name="joint_position_topic" default="/iiwa/state/JointPosition"/>
-  <arg name="ros_rate" default="1000"/>
+  <arg name="ros_rate" default="0.1"/>
   
   <param name="/iiwa/publishJointStates" type="boolean" value="true" /> <!--publish joint states (avoid joint_state_controller)-->
   <param name="/iiwa/toolName" type="string" value="$(arg tool_name)" /> <!--Sunrise tool-->
