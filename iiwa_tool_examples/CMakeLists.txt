@@ -15,13 +15,17 @@ catkin_package()
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(read_robot_state src/read_robot_state.cpp)
+add_dependencies(read_robot_state iiwa_msgs_generate_messages_cpp)
 target_link_libraries(read_robot_state ${catkin_LIBRARIES})
 
 add_executable(command_robot src/command_robot.cpp)
+add_dependencies(command_robot iiwa_msgs_generate_messages_cpp)
 target_link_libraries(command_robot ${catkin_LIBRARIES})
 
 add_executable(command_robot_moveit src/command_robot_moveit.cpp)
+add_dependencies(command_robot_moveit iiwa_msgs_generate_messages_cpp)
 target_link_libraries(command_robot_moveit ${catkin_LIBRARIES})
 
 add_executable(setting_control_mode src/setting_control_mode.cpp)
+add_dependencies(setting_control_mode iiwa_msgs_generate_messages_cpp)
 target_link_libraries(setting_control_mode ${catkin_LIBRARIES})

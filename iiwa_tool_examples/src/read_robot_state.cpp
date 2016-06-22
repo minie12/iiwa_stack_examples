@@ -9,7 +9,7 @@ bool isRobotConnected = false;
 void jointPositionCallback(const iiwa_msgs::JointPosition& jp)
 {
   if (!isRobotConnected)
-    ~isRobotConnected;
+    isRobotConnected = !isRobotConnected;
   current_joint_position = jp;
 }
 
