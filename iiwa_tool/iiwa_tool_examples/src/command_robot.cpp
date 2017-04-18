@@ -35,7 +35,7 @@ int main (int argc, char **argv) {
 	nh.param("use_cartesian_command", use_cartesian_command, true);
 	
 	// Dynamic parameter to choose the rate at wich this node should run
-  double ros_rate = 0.1;
+  double ros_rate;
 	nh.param("ros_rate", ros_rate, 0.1); // 0.1 Hz = 10 seconds
 	ros::Rate* loop_rate_ = new ros::Rate(ros_rate);
   
@@ -53,10 +53,9 @@ int main (int argc, char **argv) {
 				// Here we set the new commanded cartesian position, we just move the tool TCP 10 centemeters down and back up, every 10 seconds.
 				command_cartesian_position.pose.position.z -= direction * 0.10;
 				my_iiwa.setCartesianPose(command_cartesian_position);				
-			}
-			else {
+			} else {
         while (!my_iiwa.getJointPosition(command_joint_position)) {}
-        command_joint_position.position.a4 -= direction * 5 * M_PI / 180; // 0.0872665; // Adding/Subtracting 5 degrees (in radians) to the 4th joint
+        command_joint_position.position.a4 -= direction * 5 * M_PI / 180; // 0.0872665 // Adding/Subtracting 5 degrees (in radians) to the 4th joint
 				my_iiwa.setJointPosition(command_joint_position);
 			}
 			

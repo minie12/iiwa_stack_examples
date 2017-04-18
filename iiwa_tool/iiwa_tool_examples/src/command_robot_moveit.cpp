@@ -17,14 +17,13 @@ int main (int argc, char **argv) {
   
   std::string movegroup_name, ee_link;
   geometry_msgs::PoseStamped command_cartesian_position;
-  double ros_rate = 0.1;
-  bool isRobotConnected = false;
   
   // Dynamic parameters. Last arg is the default value. You can assign these from a launch file.
   nh.param<std::string>("move_group", movegroup_name, "manipulator");
   nh.param<std::string>("ee_link", ee_link, "tool_link_ee");
   
   // Dynamic parameter to choose the rate at wich this node should run
+  double ros_rate;
   nh.param("ros_rate", ros_rate, 0.1); // 0.1 Hz = 10 seconds
   ros::Rate* loop_rate_ = new ros::Rate(ros_rate);
     
