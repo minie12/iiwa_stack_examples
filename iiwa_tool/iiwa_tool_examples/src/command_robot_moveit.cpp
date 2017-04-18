@@ -57,16 +57,8 @@ int main (int argc, char **argv) {
       }
     }
     else {
-      ROS_ERROR("Robot is not connected...");
+      ROS_WARN_STREAM("Robot is not connected...");
       ros::Duration(5.0).sleep(); // 5 seconds
     }
-  }
-  
-  std::cerr<<"Stopping spinner..."<<std::endl;
-  spinner.stop();
-  
-  std::cerr<<"Bye!"<<std::endl;
-  
-  return 0;
-  
+  }  
 }; 
