@@ -2,6 +2,8 @@
 #include <iiwa_ros.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 
+using moveit::planning_interface::MoveItErrorCode;
+
 int main (int argc, char **argv) {
   
   // Initialize ROS
@@ -37,7 +39,7 @@ int main (int argc, char **argv) {
   group.setPlanningTime(0.5);
   group.setPlannerId("RRTConnectkConfigDefault");
   group.setEndEffectorLink(ee_link);
-  bool success_plan = false, motion_done = false, new_pose = false;
+  MoveItErrorCode success_plan = MoveItErrorCode::FAILURE, motion_done = MoveItErrorCode::FAILURE;
   while (ros::ok()) {
     if (my_iiwa.getRobotIsConnected()) {
       
@@ -47,10 +49,10 @@ int main (int argc, char **argv) {
       group.setStartStateToCurrentState();
       group.setPoseTarget(command_cartesian_position, ee_link);
       success_plan = group.plan(myplan);
-      if (success_plan) {
+      if (success_plan == MoveItErrorCode::SUCCESS) {
         motion_done = group.execute(myplan);
       }
-      if (motion_done) {
+      if (motion_done == MoveItErrorCode::SUCCESS) {
         direction *= -1; // In the next iteration the motion will be on the opposite direction
         loop_rate_->sleep(); // Sleep for some millisecond. The while loop will run every 10 seconds in this example.
       }
